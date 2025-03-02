@@ -1,0 +1,33 @@
+/* table{
+margin: 0 20px !important;
+overflow-x: auto;
+} */
+th {
+	background-color: rgb(202, 199, 199) !important;
+	color: white;
+	font-size: 16px !important;
+	
+}
+
+td{
+	font-size: 16px !important;
+}
+
+.userheader {
+	top: 10% !important;
+}
+
+.my-5{
+	margin:0px 30px;
+}
+
+.custom-divider {
+	border: none;
+	border-top: 2px solid #9c9a9a;
+	/* Dark color */
+	margin: 1.5rem 30px;
+	/* Spacing above and below */
+}
+
+
+
