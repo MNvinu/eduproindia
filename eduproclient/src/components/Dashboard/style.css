@@ -6,10 +6,10 @@ th {
 	background-color: rgb(202, 199, 199) !important;
 	color: white;
 	font-size: 16px !important;
-	
+
 }
 
-td{
+td {
 	font-size: 16px !important;
 }
 
@@ -17,8 +17,8 @@ td{
 	top: 10% !important;
 }
 
-.my-5{
-	margin:0px 30px;
+.my-5 {
+	margin: 0px 30px;
 }
 
 .custom-divider {
@@ -29,5 +29,8 @@ td{
 	/* Spacing above and below */
 }
 
-
-
+.coursetbl {
+	margin: 9px auto !important;
+	padding: 15px;
+	width: 96%;
+}

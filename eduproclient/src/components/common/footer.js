@@ -88,7 +88,8 @@ const Footer = () =>
 								<div className="col-xl-12">
 									<div className="footer-copy-right text-center">
 										<p>
-											Copyright &copy; {new Date().getFullYear()} All rights reserved
+											{/* Copyright &copy; {new Date().getFullYear()} All rights reserved */}
+											Copyright &copy; 2024 All rights reserved
 										</p>
 									</div>
 								</div>

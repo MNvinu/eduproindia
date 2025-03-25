@@ -61,7 +61,6 @@ const AboutArea2 = () => (
 			<div className="left-content2">
 				<SectionTitle title="Take the next step toward your personal and professional goals with us." />
 				<p>The automated process all your website tasks. Discover tools and techniques to engage effectively with vulnerable children and young people.</p>
-				<Link to="/signup" className="btn">Join now for Free</Link>
 			</div>
 		</div>
 	</section>

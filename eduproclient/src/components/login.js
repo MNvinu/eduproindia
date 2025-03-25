@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 
 function Login()
@@ -15,21 +17,22 @@ function Login()
 			const { userId, role } = response.data;
 
 			localStorage.setItem('userId', userId);
-			alert('Login successful');
-
+			localStorage.setItem('email', email); // Add this line
+			toast.success('Login successful');
+			// alert('Login successful');
 			if (role === 'admin')
 			{
 				window.location.href = '/admin';
 			} else
 			{
-				window.location.href = '/user/{userID}';
+				window.location.href = '/';
 			}
 		} catch (error)
 		{
 			alert('Login error: ' + error.response.data.error);
+			toast.error(error.response.data.error);
 		}
 	};
-
 
 	return (
 		<div className="signup-container">

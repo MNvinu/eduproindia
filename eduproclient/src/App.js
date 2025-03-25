@@ -10,10 +10,10 @@ import AdminDashboard from './components/Dashboard/admin';
 import UserDashboard from './components/Dashboard/user';
 import Header from './components/common/header';
 import Footer from './components/common/footer';
-import Preloader from './components/preloader';
 import Loader from './components/common/loader';
-import CourseRegistration from './components/common/registerqr'
 import Certification from './components/Dashboard/parentapp'
+import Lessons from './components/lessons/page1'
+import ProtectedRoute from "./components/protcdRoute";
 import './assets/css/style.css';
 import './assets/css/animate.min.css';
 import './assets/css/slicknav.css';
@@ -52,7 +52,6 @@ function AppContent()
 		<div className={isAuthPage ? 'auth-background' : ''}>
 			{/* <Preloader loading={loading} /> */}
 			{loading && <Loader />}
-
 			{!loading && showHeader && <Header />}
 			{/* <Header/> */}
 			{!loading && (
@@ -61,12 +60,12 @@ function AppContent()
 					<Route path="/signup" element={<Signup />} />
 					<Route path="/login" element={<Login />} />
 					<Route path="/contact" element={<ContactForm />} />
+					<Route path="/lesson" element={<Lessons />} />
 					<Route path="/admin/:userID" element={<AdminDashboard />} />
 					<Route path="/certificate" element={<Certification />} />
 					<Route path="/user/:userID" element={<UserDashboard />} />
 					<Route path="/course/:id" element={<CourseDetails />} />
 					<Route path="/main" element={<MainPage />} />
-					<Route path="/register" element={<CourseRegistration />} />
 				</Routes>
 			)}
 			{!loading && showFooter && <Footer />}
@@ -77,7 +76,6 @@ function AppContent()
 function App()
 {
 	return (
-		
 		<Router>
 			<AppContent />
 		</Router>

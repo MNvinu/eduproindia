@@ -10,24 +10,41 @@ function ContactForm()
 	});
 
 	const [responseMessage, setResponseMessage] = useState('');
-
-	// Handle form inputs
+	const [errors, setErrors] = useState({});
 	const handleChange = (e) =>
 	{
 		const { name, value } = e.target;
+		if ((name === 'name' || name === 'subject' || name === 'message') && !/^[A-Za-z\s]*$/.test(value))
+		{
+			setErrors((prevErrors) => ({
+				...prevErrors,
+				[name]: 'Only letters and spaces are allowed',
+			}));
+			return;
+		} else
+		{
+			setErrors((prevErrors) => ({
+				...prevErrors,
+				[name]: '',
+			}));
+		}
 		setFormData((prevData) => ({
 			...prevData,
 			[name]: value,
 		}));
 	};
 
-	// Handle form submission
 	const handleSubmit = async (e) =>
 	{
 		e.preventDefault();
+		if (Object.values(errors).some((error) => error !== '') || !formData.name || !formData.subject)
+		{
+			setResponseMessage('Please correct the errors before submitting.');
+			return;
+		}
 		try
 		{
-			const response = await fetch('http://localhost:5000/contact', {
+			const response = await fetch('http://localhost:8880/contact', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -43,7 +60,7 @@ function ContactForm()
 	};
 
 	return (
-		<section className="contact-section">
+		<section className="contact-section mt-100">
 			<div className="container">
 				<div className="row">
 					<div className="col-12">
@@ -140,7 +157,7 @@ function ContactForm()
 						<div className="media contact-info">
 							<span className="contact-info__icon"><i className="ti-email"></i></span>
 							<div className="media-body">
-								<h3>vinuthamnagraj@gmail.com</h3>
+								<h3>eduproinida25@gmail.com</h3>
 								<p>Send us your query anytime!</p>
 							</div>
 						</div>

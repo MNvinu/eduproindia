@@ -1,5 +1,4 @@
-import React,{useState, useEffect} from 'react';
-import qrCodeImage from '../assets/QR/qrcode.jpg';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const courses = [
@@ -47,34 +46,33 @@ const courses = [
 
 const CoursesArea = () =>
 {
-	const [showQR, setShowQR] = useState(false);
 	const navigate = useNavigate();
-	const [isAuthenticated, setIsAuthenticated] = useState(false); // Track user authentication status
+	const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('userId'));
+	const [userId, setUserId] = useState(localStorage.getItem('userId') || "");
 
-	// Mock function to check if user is authenticated
+	useEffect(() =>
+		{
+			const handleStorageChange = () =>
+			{
+				const storedUserId = localStorage.getItem('userId');
+				setIsLoggedIn(!!storedUserId);
+				setUserId(storedUserId);
+			};
+			window.addEventListener('storage', handleStorageChange);
+			return () =>
+			{
+				window.removeEventListener('storage', handleStorageChange);
+			};
+		}, []);
 	useEffect(() =>
 	{
-		// Replace with real authentication logic
-		const userLoggedIn = !!localStorage.getItem('userLoggedIn');
-		setIsAuthenticated(userLoggedIn);
+		const userToken = localStorage.getItem('authToken');
+		if (userToken)
+		{
+			setIsLoggedIn(true);
+		}
 	}, []);
 
-	const handleFindOutMoreClick = () =>
-	{
-		if (isAuthenticated)
-		{
-			navigate('/courselist');
-		} else
-		{
-			navigate('/signup');
-		}
-	};
-
-	const handleRegisterClick = () =>
-	{
-		console.log("Register Now button clicked!"); // Debugging line
-		setShowQR(true); // Show QR code modal
-	};
 	return (
 		<div className="courses-area section-padding40 ">
 			<div >
@@ -87,61 +85,42 @@ const CoursesArea = () =>
 				</div>
 				<div className="courses_active">
 					<div className='slick-list draggable'>
-					{courses.map((course) => (
-						<div className="properties pb-20" key={course.id}>
-							<div className="properties__card">
-								<div className="properties__img overlay1">
-									{/* <a href="#"><img src={course.imgSrc} alt={course.title} /></a> */}
-								</div>
-								<div className="properties__caption">
-									{/* <p>{course.category}</p> */}
-									<h3><a href="#">{course.title}</a></h3>
-									<p>{course.description}</p>
-									<div className="properties__footer d-flex justify-content-between align-items-center">
-										<div className="restaurant-name">
-											<div className="rating">
-												{[...Array(5)].map((_, index) => (
-													<i
-														key={index}
-														className={`fas ${index < Math.floor(course.rating) ? "fa-star" : index < course.rating ? "fa-star-half" : "fa-star"}`}
-													></i>
-												))}
-											</div>
-											<p><span>({course.rating})</span> based on {course.reviews}</p>
-										</div>
-										<div className="price">
-										</div>
+						{courses.map((course) => (
+							<div className="properties pb-20" key={course.id}>
+								<div className="properties__card">
+									<div className="properties__img overlay1">
+										{/* <a href="#"><img src={course.imgSrc} alt={course.title} /></a> */}
 									</div>
-									{/* <a href="#" className="border-btn border-btn2">Find out more</a> */}
-									<button
-										onClick={handleFindOutMoreClick}
-										className="border-btn border-btn2"
-									>
-										Find out more
-									</button>
-									
+									<div className="properties__caption">
+										{/* <p>{course.category}</p> */}
+										<h3><a href="#">{course.title}</a></h3>
+										<p>{course.description}</p>
+										<div className="properties__footer d-flex justify-content-between align-items-center">
+											<div className="restaurant-name">
+												<div className="rating">
+													{[...Array(5)].map((_, index) => (
+														<i
+															key={index}
+															className={`fas ${index < Math.floor(course.rating) ? "fa-star" : index < course.rating ? "fa-star-half" : "fa-star"}`}
+														></i>
+													))}
+												</div>
+												<p><span>({course.rating})</span> based on {course.reviews}</p>
+											</div>
+											<div className="price">
+											</div>
+										</div>
+										
+										<Link to="/main" className="btn hero-btn" data-animation="fadeInLeft" data-delay="0.7s">
+											Find out more
+										</Link>
+										
+									</div>
 								</div>
 							</div>
-						</div>
-					))}
+						))}
 					</div>
 				</div>
-			</div>
-			<div>
-				<div className="section-tittle text-center mt-20">
-					<Link to="/signup" className="btn">Register Now</Link>
-				</div>
-				{/* <button onClick={handleRegisterClick} className='btn'>Register Now</button> */}
-				
-				{/* {showQR && (
-					<div className="qr-modal">
-						<div className="qr-content">
-							<h3>Scan to Pay</h3>
-							<img src={qrCodeImage} alt="QR Code" />
-							<button onClick={() => setShowQR(false)}>Close</button>
-						</div>
-					</div>
-				)} */}
 			</div>
 		</div>
 	);

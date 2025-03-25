@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import './scss/styles.scss'; // Ensure this path is correct
 
@@ -16,6 +17,7 @@ function Signup()
 	});
 	const [signupMessage, setSignupMessage] = useState('');
 	const [useReferralCode, setUseReferralCode] = useState(false);
+	const navigate = useNavigate();
 
 	const handleChange = (e) =>
 	{
@@ -45,8 +47,16 @@ function Signup()
 			});
 
 			const { referralCode } = response.data.user;
+			const { userId} = response.data;
+
+			localStorage.setItem('userId', userId);
+			localStorage.setItem('email', formData.email);
 			// setAlertData({ message: `Signup successful! Your referral code is ${referralCode}`, severity: 'success', open: true });
 			toast.success(`Signup successful! Your referral code is ${referralCode}`);
+			setTimeout(() =>
+			{
+				window.location.href = '/';
+			}, 2000);
 		} catch (error)
 		{
 			console.error('Error during signup:', error); // Log full error details to the console
@@ -55,7 +65,6 @@ function Signup()
 		}
 	};
 	// console.log(alertData);
-
 	return (
 		<div className="signup-container">
 			<ToastContainer />
@@ -136,10 +145,10 @@ function Signup()
 								type="checkbox"
 								checked={useReferralCode}
 								onChange={() => setUseReferralCode(!useReferralCode)}
+								className="referral-checkbox"
 							/>
 							<span>Have a referral code?</span>
 						</label>
-
 						{useReferralCode && (
 							<div className="form-input">
 								{/* <label>Referral Code</label> */}

@@ -7,7 +7,7 @@ export const courses = [
 		id: 1,
 		title: 'Web Designing',
 		description: 'Learn the basics of HTML, CSS, and JavaScript to design beautiful websites.',
-		image: require('../assets/img/login.jpg'),
+		image: require('../assets/img/gallery/courses/web.webp'),
 		price: 5000,
 		instructor: 'John Doe',
 		rating: 4.5,
@@ -25,7 +25,7 @@ export const courses = [
 		id: 2,
 		title: 'Fashion Designing',
 		description: 'Develop your creativity and design unique apparel with expert guidance.',
-		image: require('../assets/img/login2.jpg'),
+		image: require('../assets/img/gallery/courses/course2.jpg'),
 		price: 7000,
 		instructor: 'Jane Smith',
 		rating: 4.6,
@@ -43,8 +43,8 @@ export const courses = [
 		id: 3,
 		title: 'Digital Marketing',
 		description: 'Master social media, SEO, and digital advertising strategies.',
-		image: require('../assets/img/login3.jpg'),
-		price: 8000,
+		image: require('../assets/img/gallery/courses/digital.jpg'),
+		price: 5000,
 		instructor: 'Mike Johnson',
 		rating: 4.7,
 		totalReviews: 142,
@@ -61,8 +61,8 @@ export const courses = [
 		id: 4,
 		title: 'Data Science',
 		description: 'Analyze data and solve real-world problems with machine learning and AI.',
-		image: require('../assets/img/login4.jpg'),
-		price: 12000,
+		image: require('../assets/img/gallery/courses/datascience.avif'),
+		price: 15000,
 		instructor: 'Dr. Sarah Lee',
 		rating: 4.8,
 		totalReviews: 200,
@@ -79,7 +79,7 @@ export const courses = [
 		id: 5,
 		title: 'Graphic Design',
 		description: 'Create captivating visuals using Adobe Photoshop and Illustrator.',
-		image: require('../assets/img/login5.jpg'),
+		image: require('../assets/img/gallery/courses/graphcdesign.jpg'),
 		price: 6000,
 		instructor: 'Chris Brown',
 		rating: 4.6,
@@ -95,9 +95,9 @@ export const courses = [
 	},
 	{
 		id: 6,
-		title: 'Photography',
+		title: 'SQL',
 		description: 'Learn professional techniques for capturing and editing stunning photos.',
-		image: require('../assets/img/login6.jpg'),
+		image: require('../assets/img/gallery/courses/sql.png'),
 		price: 4000,
 		instructor: 'Emily White',
 		rating: 4.4,
@@ -115,8 +115,8 @@ export const courses = [
 		id: 7,
 		title: 'Mobile App Development',
 		description: 'Build cross-platform mobile applications with React Native and Flutter.',
-		image: require('../assets/img/loginpic.jpg'),
-		price: 15000,
+		image: require('../assets/img/gallery/courses/mobile.jpeg'),
+		price: 20000,
 		instructor: 'Robert Black',
 		rating: 4.9,
 		totalReviews: 175,
@@ -203,7 +203,7 @@ export default function MainPage()
 				{/* Left side - Menu */}
 				<Grid item xs={12} md={3}>
 					<Card sx={{ padding: '20px', height: '100%' }}>
-						<Button fullWidth variant="outlined" sx={{ marginBottom: '10px', fontSize: '14px', fontWeight:'500px'}}>
+						<Button fullWidth variant="outlined" sx={{ marginBottom: '20px', fontSize: '14px', fontWeight:'500px'}}>
 							Menu
 						</Button>
 						{/* <Typography variant="h5" gutterBottom>Menu</Typography> */}
@@ -212,6 +212,7 @@ export default function MainPage()
 						<Typography variant="h5" className='CourseMenu' gutterBottom>JavaScript</Typography>
 						<Typography variant="h5" className='CourseMenu' gutterBottom>BootStrap</Typography>
 						<Typography variant="h5" className='CourseMenu' gutterBottom>Digital Marketing</Typography>
+						<Typography variant="h5" className='CourseMenu' gutterBottom>Cyber Security</Typography>
 						<Typography variant="h5" className='CourseMenu' gutterBottom>Graphic Design</Typography>
 						<Typography variant="h5" className='CourseMenu' gutterBottom>Data Science</Typography>
 						<Typography variant="h5" className='CourseMenu' gutterBottom>Mobile App Development</Typography>

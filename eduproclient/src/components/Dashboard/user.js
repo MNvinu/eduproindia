@@ -1,6 +1,5 @@
-// AdminDashboard.js
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import logo from '../../assets/img/logo/logo.png';
 import no_ofreferal from '../../assets/img/gallery/no_ofreferal.png';
 import course from '../../assets/img/gallery/course.png';
@@ -12,108 +11,92 @@ import './style.css'
 
 function UserDashboard()
 {
-	const [users, setUsers] = useState([]);
-	const [userName, setUserName] = useState('');
-	const [loading, setLoading] = useState(true);
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
-	// const [referralCode, setReferralCode] = useState('');
 	const [userData, setUserData] = useState({
-		firstname: "",
+		firstName: "",
 		referralCode: "",
 		totalReferrals: 0
 	});
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const navigate = useNavigate();
-	const email = localStorage.getItem("email");
 
-	const handleLogout = async () =>
+	// useEffect(() =>
+	// {
+	// 	const userId = localStorage.getItem('userId');
+	// 	setIsLoggedIn(!!userId);
+	// }, []);
+
+	useEffect(() =>
 	{
-		try
+		const storedUserId = localStorage.getItem('userId');
+		setIsLoggedIn(!!storedUserId);
+
+		// Load userData from localStorage
+		const storedUserData = localStorage.getItem('userData');
+		if (storedUserData)
 		{
-			const userId = localStorage.getItem('userId'); // Get stored userId
-			if (!userId)
-			{
-				console.error("No userId found");
-				return;
-			}
-
-			await axios.post('http://localhost:8880/logout', { userID: userId })
-				.then(response => console.log("Logout successful:", response))
-				.catch(error => console.error("Logout error:", error.response ? error.response.data : error.message));
-
-			// Clear localStorage
-			localStorage.removeItem('userId');
-			localStorage.removeItem('referralCode');
-
-			// Redirect to login page
-			window.location.href = '/login';
-		} catch (error)
-		{
-			console.error("Logout failed:", error);
+			setUserData(JSON.parse(storedUserData));
 		}
+	}, []);
+
+	const updateUserData = (newData) =>
+	{
+		setUserData(prevData =>
+		{
+			const updatedData = { ...prevData, ...newData };
+			localStorage.setItem('userData', JSON.stringify(updatedData));
+			return updatedData;
+		});
 	};
 
 	useEffect(() =>
 	{
 		const fetchData = async () =>
 		{
-			const userId = localStorage.getItem('userId');
-			console.log("User ID:", userId);
-			if (!userId)
+			const storedUserId = localStorage.getItem("userId");
+			if (!storedUserId)
 			{
-				console.error("User ID not found in localStorage");
-				navigate('/login');
-				return;  // Stop execution if userId is missing
+				console.error("User ID is missing!");
+				navigate('/login'); // Redirect to login if userId is missing
+				return;
 			}
-
 			try
 			{
-				// Fetch all users
-				const usersResponse = await axios.get('http://localhost:8880/user');
-				console.log("Users API response:", usersResponse.data); // Debugging
-
-				// Ensure the API actually returns an array of users
-				if (!Array.isArray(usersResponse.data))
-				{
-					console.error("Unexpected response format:", usersResponse.data);
-					return;
-				}
-
+				// Fetch users
+				const usersResponse = await axios.get('http://localhost:8880/users');
+				console.log("API Response:", usersResponse.data);
 				const users = usersResponse.data;
-				setUsers(users);
 
-				// Find the logged-in user by email
-				const user = users.find(user => user.email === email);
+				// Find the user by userId
+				const user = users.find(user => user.userId === storedUserId);
+
 				if (user)
 				{
-					setUserData({
-						firstname: user.firstName,
+					const userData = {
+						firstName: user.firstName,
 						referralCode: user.referralCode,
 						totalReferrals: user.totalReferrals
-					});
-				}
-
-				// Fetch specific user details by ID
-				const userResponse = await axios.get(`http://localhost:8880/user/${userId}`);
-				console.log("User API response:", userResponse.data); // Debugging
-
-				if (userResponse.data && userResponse.data.firstname)
-				{
-					setUserName(userResponse.data.firstname);
+					};
+					// Store in localStorage for persistence
+					localStorage.setItem('userData', JSON.stringify(userData));
+					setUserData(userData);
 				} else
 				{
-					console.warn("No userName found in response data");
+					console.error("User not found in database.");
 				}
 			} catch (error)
 			{
 				console.error("Error fetching data:", error);
-			} finally
-			{
-				setLoading(false);
 			}
 		};
-
 		fetchData();
-	}, [email, navigate]);
+	}, [navigate]);
+
+	const copyReferralCode = () =>
+	{
+		navigator.clipboard.writeText(userData.referralCode);
+		alert("Referral code copied!");
+	};
+
 
 	return (
 		<div>
@@ -130,33 +113,6 @@ function UserDashboard()
 										</Link>
 									</div>
 								</div>
-								<div className="col-xl-10 col-lg-10">
-									<div className="menu-wrapper d-flex align-items-center justify-content-end">
-										{/* Main-menu */}
-										<div className="main-menu d-none d-lg-block">
-											<nav>
-												<ul id="navigation">
-													<li className="active"><Link to="/">Home</Link></li>
-													<li><Link to="/register">Courses</Link></li>
-													{isLoggedIn ? (
-														<li className="button-header">
-															<button onClick={handleLogout} className="btn">Logout</button>
-														</li>
-													) : (
-														<>
-															<li className="button-header margin-left">
-																<Link to="/signup" className="header-btn">Sign up</Link>
-															</li>
-															<li className="button-header">
-																<Link to="/login" className="header-btn">Log In</Link>
-															</li>
-														</>
-													)}
-												</ul>
-											</nav>
-										</div>
-									</div>
-								</div>
 								{/* Mobile Menu */}
 								<div className="col-12">
 									<div className="mobile_menu d-block d-lg-none"></div>
@@ -167,10 +123,10 @@ function UserDashboard()
 				</div>
 			</div>
 
-			<div className="userheader" style={{ marginTop: "2%" }}>
+			<div className="userheader mt-50">
 				<div className="row align-items-center">
 					<div className="col-sm mb-2 mb-sm-0">
-						<h2>Welcome, {userData.firstname}!</h2>
+						<h1 className="page-header-title my-5">Welcome, {userData.firstName}!</h1>
 						<h1 className="page-header-title my-5">Referrals</h1>
 					</div>
 
@@ -183,13 +139,13 @@ function UserDashboard()
 								type="text"
 								className="form-control"
 								readOnly
-								value={ userData.referralCode }
+								value={userData.referralCode}
 							/>
-							{/* <Tooltip title="Copy to clipboard">
-								<IconButton onClick={handleCopyToClipboard} aria-label="copy referral code">
+							<Tooltip title="Copy to clipboard">
+								<IconButton aria-label="copy referral code" onClick={copyReferralCode}>
 									<ContentCopyIcon />
 								</IconButton>
-							</Tooltip> */}
+							</Tooltip>
 						</div>
 					</div>
 				</div>
@@ -198,22 +154,9 @@ function UserDashboard()
 					<div className="col-lg-4">
 						<div className="text-center">
 							<img src={course} className="avatar avatar-xl avatar-4x3 mb-4" alt="Logo" style={{ height: "100px" }} />
-							<br/>
+							<br />
 							<span className="text-cap text-body"> Courses Registered</span>
-							<span className="d-block display-4 text-dark mb-2">8</span>
-
-							<div className="row col-divider">
-								<div className="col text-end">
-									<span className="d-block fw-semibold text-success">
-										<i className="bi-graph-up"></i> 5.6%
-									</span>
-									<span className="d-block">change</span>
-								</div>
-								<div className="col text-start">
-									<span className="d-block fw-semibold text-dark">$582.00</span>
-									<span className="d-block">last week</span>
-								</div>
-							</div>
+							<span className="d-block display-4 text-dark mb-2">2</span>
 						</div>
 					</div>
 
@@ -222,7 +165,7 @@ function UserDashboard()
 							<img src={no_ofreferal} className="avatar avatar-xl avatar-4x3 mb-4" alt="Logo" style={{ height: "100px" }} />
 							<br />
 							<span className="text-cap text-body"> Your Number of Referrals</span>
-							<span className="d-block display-4 text-dark mb-2">{ userData.totalReferrals }</span>
+							<span className="d-block display-4 text-dark mb-2">{userData.totalReferrals}</span>
 						</div>
 					</div>
 
@@ -230,26 +173,13 @@ function UserDashboard()
 						<div className="text-center">
 							{/* <img className="avatar avatar-xl avatar-4x3 mb-4" src="./assets/svg/illustrations/oc-money-profits.svg" alt="Amount earned" style={{ minHeight: '6rem' }} /> */}
 							<img src={amountearned} className="avatar avatar-xl avatar-4x3 mb-4" alt="Logo" style={{ height: "100px" }} />
-							<br/>
+							<br />
 							<span className="text-cap text-body">Amount earned</span>
-							<span className="d-block display-4 text-dark mb-2">$53.00</span>
+							<span className="d-block display-4 text-dark mb-2">0.00</span>
 
-							<div className="row col-divider">
-								<div className="col text-end">
-									<span className="d-block fw-semibold text-success">
-										<i className="bi-graph-up"></i> 5.6%
-									</span>
-									<span className="d-block">change</span>
-								</div>
-								<div className="col text-start">
-									<span className="d-block fw-semibold text-dark">$582.00</span>
-									<span className="d-block">last week</span>
-								</div>
-							</div>
 						</div>
 					</div>
 				</div>
-
 				<div className="my-5">
 					<p className="text-muted">
 						<i className="bi-exclamation-octagon"></i> Last referral: August 25, 2020.
@@ -258,7 +188,7 @@ function UserDashboard()
 
 				<div>
 					<h1 className="my-5">No of Courses Registered</h1>
-					<table className="my-5">
+					<table className="coursetbl my-5">
 						<thead >
 							<tr>
 								<th>Course Id</th>

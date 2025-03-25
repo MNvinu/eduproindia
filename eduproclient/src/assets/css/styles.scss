@@ -1,7 +1,8 @@
 // Define color variables for easier customization
 $white: #fff;
 $black: #000;
-$page-background-image: url('../img/gallery/elearning1.gif');
+// $page-background-image: url('../img/gallery/elearning1.gif');
+$page-background-image: url('../img/carousel-1.jpg');
 
 body {
 	margin: 0; // Remove default margin
@@ -13,13 +14,14 @@ body {
 
 .slider-area {
 	background-image: $page-background-image !important; // Set the background image
-	background-size: 620px 620px !important; // Cover the entire viewport
-	background-position: right center !important; // Center the background image
-	background-repeat: no-repeat !important; // Prevent image from repeating;
-	// background-size: contain;
-	// background-position: center;
-	// background-repeat: no-repeat;
-
+	// background-size: 620px 620px !important; // Cover the entire viewport
+	// background-position: right center !important; // Center the background image
+	// background-repeat: no-repeat !important; // Prevent image from repeating;
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-color: rgba(0, 0, 0, 0.5);
+	background-blend-mode: darken;
 }
 
 .login-form {
@@ -256,7 +258,7 @@ body {
 					color: #6E7697;
 
 					span {
-						color: #d36750 ;
+						color: #d36750;
 						font-size: 12px;
 					}
 				}
@@ -282,7 +284,7 @@ body {
 	.rating {
 		i {
 			font-size: 14px;
-			color: #d36750 ;
+			color: #d36750;
 		}
 	}
 }
@@ -519,4 +521,3 @@ body {
 		}
 	}
 }
-

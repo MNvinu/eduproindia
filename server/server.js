@@ -24,7 +24,7 @@ sequelize.sync({ alter: true }).then(() => console.log('Database & tables create
 // Routes
 app.use('/api/users', userRoutes);
 
-const adminEmails = ["admin1@example.com", "admin2@example.com"];
+const adminEmails = ["admin1@gmail.com", "admin2@gmail.com"];
 
 const db = mysql.createConnection({
 	host: process.env.DB_HOST,
@@ -34,7 +34,6 @@ const db = mysql.createConnection({
 	port: process.env.DB_PORT,
 	connectTimeout: 10000
 });
-
 
 db.connect(err => err ? console.error('MySQL connection error:', err) : console.log('Connected to MySQL'));
 
@@ -121,7 +120,9 @@ app.post('/login', async (req, res) =>
 		const userID = uuidv4();
 		const isAdmin = adminEmails.includes(email);
 
-		res.json({ message: 'Login successful', userID, redirectPath: isAdmin ? '/admin' : '/user' });
+		// res.json({ message: 'Login successful', userID, redirectPath: isAdmin ? '/admin' : '/user' });
+		res.json({ message: 'Login successful', userId: user.userId, role: isAdmin ? 'admin' : 'user' });
+
 	} catch (error)
 	{
 		console.error('Login error:', error);
@@ -140,7 +141,6 @@ app.post('/logout', (req, res) =>
 	}
 	// Here, you can remove user session data from DB or cache (if using sessions)
 	console.log(`User ${userID} logged out`);
-
 	res.json({ message: 'Logged out successfully' });
 });
 
@@ -149,19 +149,22 @@ app.post('/contact', async (req, res) =>
 {
 	const { name, email, subject, message } = req.body;
 
+	if (!name || !email || !subject || !message)
+	{
+		return res.status(400).json({ message: 'All fields are required' });
+	}
+
 	const transporter = nodemailer.createTransport({
-		host: 'smtp.hostinger.com',
-		port: 465,
-		secure: true,
+		service: 'gmail',
 		auth: {
 			user: process.env.EMAIL_USER,
 			pass: process.env.EMAIL_PASS,
-		},
+		}
 	});
 
 	const mailOptions = {
 		from: `"${name}" <${email}>`,
-		to: process.env.EMAIL_USER,
+		to: `eduproindia25@gmail.com`,
 		subject: `Contact Form: ${subject}`,
 		text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
 	};
@@ -172,10 +175,11 @@ app.post('/contact', async (req, res) =>
 		res.status(200).json({ message: 'Message sent successfully!' });
 	} catch (error)
 	{
-		console.error('Error sending email:', error);
+		console.error('Error sending email:', error.response || error);
 		res.status(500).json({ message: 'Error sending message. Please try again later.' });
 	}
 });
+
 
 // Generate Receipt ID
 app.post('/generate-receipt-id', (req, res) =>
@@ -238,6 +242,41 @@ app.get('/user/referral/:userID', async (req, res) =>
 		res.status(500).json({ message: "Internal server error" });
 	}
 });
+
+const formatMySQLDateTime = (isoDate) =>
+{
+	// Convert ISO Date (2024-02-25T10:30:00Z) to MySQL format (2024-02-25 10:30:00)
+	const date = new Date(isoDate);
+	return date.toISOString().slice(0, 19).replace('T', ' ');
+};
+
+app.post('/save-purchase', (req, res) =>
+{
+	console.log("Received POST /save-purchase", req.body);
+
+	const { userId, courseId, courseTitle, price, gst, totalAmount, receiptID, purchaseDate } = req.body;
+
+	const formattedDate = formatMySQLDateTime(purchaseDate); 
+
+	const query = `
+        INSERT INTO purchases (user_id, course_id, course_title, price, gst, total_amount, receipt_id, purchase_date)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+
+	db.query(
+		query,
+		[userId, courseId, courseTitle, price, gst, totalAmount, receiptID, formattedDate],
+		(err, result) =>
+		{
+			if (err)
+			{
+				console.error('Database error:', err);
+				return res.status(500).json({ error: 'Error saving purchase', details: err });
+			}
+			res.status(200).send('Purchase saved successfully');
+		}
+	);
+});
+
 
 // Start server
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
