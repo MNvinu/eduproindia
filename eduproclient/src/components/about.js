@@ -6,7 +6,6 @@ const AboutSection = () =>
 	return (
 		<section className="about-area1 fix pt-10">
 			<div className="support-wrapper align-items-center">
-				{/* Left Content */}
 				<div className="left-content1">
 					{/* Section Title */}
 					<div className="section-tittle section-tittle2 mb-55">
@@ -19,12 +18,9 @@ const AboutSection = () =>
 							</p>
 						</div>
 					</div>
-
 					{/* Feature Items */}
 					<div className="single-features">
 						<div className="features-icon">
-							{/* <img src="../assets/img/icon/right-icon.svg" alt="Right Icon" />
-							 */}
 							<i class="fas fa-check"></i>
 						</div>
 						<div className="features-caption">
@@ -50,7 +46,6 @@ const AboutSection = () =>
 						</div>
 					</div>
 				</div>
-
 				{/* Right Content */}
 				<div className="right-content1">
 					<div className="right-img">

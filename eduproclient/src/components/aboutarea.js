@@ -10,7 +10,6 @@ const AboutArea3 = () =>
 			<div className="support-wrapper align-items-center">
 				<div className="right-content3">
 					<div className="right-img">
-						{/* <img src="/assets/img/gallery/about3.png" alt="About" /> */}
 						<img src={abtpgImg} alt="About" />
 					</div>
 				</div>

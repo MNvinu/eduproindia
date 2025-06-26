@@ -4,7 +4,7 @@ import UPIimage from '../assets/img/gallery/gifs/upiImagge.webp'
 import StarIcon from "@mui/icons-material/Star";
 import PeopleIcon from "@mui/icons-material/People";
 import { Grid, Card, CardContent,Typography, Divider, Box, Rating } from '@mui/material';
-import { courses } from './coursepage'; // Import the courses data
+import { courses } from './coursepage';
 import { QRCodeCanvas } from 'qrcode.react';
 // import './CourseDetails.css';
 
@@ -119,20 +119,13 @@ const CourseDetails = () =>
 			console.error('Error:', error);
 		}
 	};
-
-
 	return (
-		
 		<div className="course-details mt-100">
-			{/* <button className="back-button" onClick={() => navigate(-1)}>
-				&#8592; Back
-			</button> */}
 			<div className=" ml-50 mr-50">
 				<CardContent>
 					<Typography variant="h4" color="textSecondary" gutterBottom>
 						Courses &gt; {course.title}
 					</Typography>
-
 					<Typography variant="h3" fontWeight="bold" gutterBottom>
 						{/* HTML and CSS for Beginners - Build a Website & Launch ONLINE */}
 						{course.description}
@@ -155,33 +148,20 @@ const CourseDetails = () =>
 						<Grid item>
 							<Box display="flex" alignItems="center">
 								<StarIcon sx={{ color: "#FFA41B" }} />
-								<Typography variant="h4" sx={{ ml: 0.5 }}>
-									4.4
-								</Typography>
+								<Typography variant="h4" sx={{ ml: 0.5 }}>4.4</Typography>
 							</Box>
-							<Typography variant="h5" color="textSecondary">
-								36,983 ratings
-							</Typography>
+							<Typography variant="h5" color="textSecondary">36,983 ratings</Typography>
 						</Grid>
-
 						<Grid item>
 							<Box display="flex" alignItems="center">
 								<PeopleIcon sx={{ color: "#6C757D" }} />
-								<Typography variant="h4" sx={{ ml: 0.5 }}>
-									371,086
-								</Typography>
+								<Typography variant="h4" sx={{ ml: 0.5 }}>371,086</Typography>
 							</Box>
-							<Typography variant="h5" color="textSecondary">
-								learners
-							</Typography>
+							<Typography variant="h5" color="textSecondary">learners</Typography>
 						</Grid>
 					</Grid>
 					<Divider sx={{ my: 3 }} />
-
-					<Typography variant="h4" fontWeight="bold" gutterBottom>
-						What you'll learn
-					</Typography>
-
+					<Typography variant="h4" fontWeight="bold" gutterBottom>What you'll learn</Typography>
 					<Grid container spacing={2}>
 						<Grid item xs={6}>
 							<ul>
@@ -207,9 +187,7 @@ const CourseDetails = () =>
 						Enroll Now
 					</button>
 				</CardContent>
-
 			</div>
-
 			{/* <div className="course-header">
 				<img src={course.image} alt={course.title} className="course-image" />
 				<div className="course-info">
@@ -234,11 +212,10 @@ const CourseDetails = () =>
 					<button className="enroll-button" onClick={handleEnroll}>
 						Enroll Now
 					</button>
-					
+				
 				</div>
 			</div>
 			 */}
-
 			{showQRCode && (
 				<div className="qr-popup" onClick={handleOutsideClick}>
 					<div className="qr-content">
@@ -295,13 +272,10 @@ const CourseDetails = () =>
 								<p>This will redirect you to your UPI app (PhonePe, Google Pay, or Paytm).</p>
 							</div>
 						</div>
-
 					</div>
 				</div>
-
 			)}
 		</div>
-
 	);
 };
 

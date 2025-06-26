@@ -13,6 +13,7 @@ import Footer from './components/common/footer';
 import Loader from './components/common/loader';
 import Certification from './components/Dashboard/parentapp'
 import Lessons from './components/lessons/page1'
+import NewLessons from './components/lessons/coursePage'
 import ProtectedRoute from "./components/protcdRoute";
 import './assets/css/style.css';
 import './assets/css/animate.min.css';
@@ -66,6 +67,7 @@ function AppContent()
 					<Route path="/user/:userID" element={<UserDashboard />} />
 					<Route path="/course/:id" element={<CourseDetails />} />
 					<Route path="/main" element={<MainPage />} />
+					<Route path="/content" element={<NewLessons />} />
 				</Routes>
 			)}
 			{!loading && showFooter && <Footer />}
